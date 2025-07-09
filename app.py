@@ -327,12 +327,13 @@ def edit_student(id):
         grade = request.form['grade']
         address = request.form['address']
         phone = request.form['phone']
+        parent_id = request.form['parent_id']
         
         conn.execute('''
             UPDATE students 
-            SET first_name = ?, last_name = ?, date_of_birth = ?, grade = ?, address = ?, phone = ?
+            SET first_name = ?, last_name = ?, date_of_birth = ?, grade = ?, address = ?, phone = ?, parent_id = ?
             WHERE id = ?
-        ''', (first_name, last_name, date_of_birth, grade, address, phone, id))
+        ''', (first_name, last_name, date_of_birth, grade, address, phone, parent_id, id))
         conn.commit()
         conn.close()
         
@@ -340,13 +341,16 @@ def edit_student(id):
         return redirect(url_for('list_students'))
 
     student = conn.execute('SELECT * FROM students WHERE id = ?', (id,)).fetchone()
+    phaters = conn.execute('''
+        SELECT * FROM users WHERE  role = 'padre'
+    ''').fetchall()
     conn.close()
 
     if not student:
         flash('Estudiante no encontrado.', 'error')
         return redirect(url_for('list_students'))
 
-    return render_template('students/edit.html', student=student)
+    return render_template('students/edit.html', student=student, phaters=phaters)
 
 @app.route('/students/delete/<int:id>')
 @login_required
@@ -760,9 +764,16 @@ def list_announcements():
         FROM announcements a
         JOIN users u ON a.author_id = u.id
         WHERE (a.expires_at IS NULL OR a.expires_at >= date('now'))
-        AND (a.target_audience = 'todos' OR a.target_audience = ?)
-    '''
-    params = [session['user_role']]
+    '''  
+    params = []  
+    if session['user_role'] != 'director':
+        query += "AND (a.target_audience = 'todos' OR a.target_audience = ?)"
+        if session['user_role']=='profesor':
+            params.append('profesores')
+        else:
+            params.append('estudiantes')
+            
+    
     
     if category:
         query += ' AND a.category = ?'

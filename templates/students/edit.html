@@ -74,6 +74,14 @@
                         <input type="tel" class="form-control" id="phone" name="phone" value="{{ student.phone or '' }}">
                     </div>
                     
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Tutor o apoderado</label>
+                        <select class="form-control" id="grade" name="parent_id" required>
+                            {% for phater in phaters %}
+                            <option value="{{ phater.id }}" {{ 'selected' if student.parent_id == phater.id }}> {{ phater.full_name }} </option>
+                            {% endfor%}
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Actualizar Estudiante
                     </button>

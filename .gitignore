@@ -1,7 +1,4 @@
-/juan/
-
-
+juan/
+init_sample_data.py
 *.db
-
-
-/__pycache__/
+__pycache__/
