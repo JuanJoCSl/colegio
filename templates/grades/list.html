@@ -24,6 +24,7 @@
                 <th>Tipo</th>
                 <th>Fecha</th>
                 <th>Profesor</th>
+                <th>Curso</th>
             </tr>
         </thead>
         <tbody>
@@ -39,6 +40,7 @@
                 <td>{{ grade.grade_type.title() }}</td>
                 <td>{{ grade.date_recorded }}</td>
                 <td>{{ grade.teacher_name }}</td>
+                <td>{{ grade.grade }}</td>
             </tr>
             {% else %}
             <tr>

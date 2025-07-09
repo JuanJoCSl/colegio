@@ -295,19 +295,24 @@ def add_student():
         grade = request.form['grade']
         address = request.form['address']
         phone = request.form['phone']
+        parent_id = request.form['parent_id']
         
         conn = get_db_connection()
         conn.execute('''
-            INSERT INTO students (first_name, last_name, date_of_birth, grade, address, phone)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (first_name, last_name, date_of_birth, grade, address, phone))
+            INSERT INTO students (first_name, last_name, date_of_birth, grade, address, phone, parent_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (first_name, last_name, date_of_birth, grade, address, phone, parent_id))
         conn.commit()
         conn.close()
         
         flash('Estudiante registrado exitosamente.', 'success')
         return redirect(url_for('list_students'))
-
-    return render_template('students/add.html')
+    conn = get_db_connection()
+    phaters = conn.execute('''
+        SELECT * FROM users WHERE  role = 'padre'
+    ''').fetchall()
+    conn.close()
+    return render_template('students/add.html', phaters=phaters)
 
 @app.route('/students/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -445,24 +450,55 @@ def list_grades():
     if session['user_role'] == 'padre':
         # Parents can only see their children's grades
         grades = conn.execute('''
-            SELECT g.*, s.first_name || ' ' || s.last_name as student_name,
+            SELECT g.*, s.first_name || ' ' || s.last_name as student_name, s.grade,
                    sub.name as subject_name, t.first_name || ' ' || t.last_name as teacher_name
             FROM grades g
             JOIN students s ON g.student_id = s.id
             JOIN subjects sub ON g.subject_id = sub.id
             JOIN teachers t ON g.teacher_id = t.id
             WHERE s.parent_id = ?
-            ORDER BY g.date_recorded DESC
+            ORDER BY 
+            CASE s.grade
+        WHEN '1ro Primaria' THEN 1
+        WHEN '2do Primaria' THEN 2
+        WHEN '3ro Primaria' THEN 3
+        WHEN '4to Primaria' THEN 4
+        WHEN '5to Primaria' THEN 5
+        WHEN '6to Primaria' THEN 6
+        WHEN '1ro Secundaria' THEN 7
+        WHEN '2do Secundaria' THEN 8
+        WHEN '3ro Secundaria' THEN 9
+        WHEN '4to Secundaria' THEN 10
+        WHEN '5to Secundaria' THEN 11
+        WHEN '6to Secundaria' THEN 12
+        ELSE 99  -- Opcional: para grados no listados
+    END,g.date_recorded DESC
         ''', (session['user_id'],)).fetchall()
     else:
         grades = conn.execute('''
-            SELECT g.*, s.first_name || ' ' || s.last_name as student_name,
+            SELECT g.*, s.first_name || ' ' || s.last_name as student_name, s.grade,
                    sub.name as subject_name, t.first_name || ' ' || t.last_name as teacher_name
             FROM grades g
             JOIN students s ON g.student_id = s.id
             JOIN subjects sub ON g.subject_id = sub.id
             JOIN teachers t ON g.teacher_id = t.id
-            ORDER BY g.date_recorded DESC
+            ORDER BY
+            CASE s.grade
+        WHEN '1ro Primaria' THEN 1
+        WHEN '2do Primaria' THEN 2
+        WHEN '3ro Primaria' THEN 3
+        WHEN '4to Primaria' THEN 4
+        WHEN '5to Primaria' THEN 5
+        WHEN '6to Primaria' THEN 6
+        WHEN '1ro Secundaria' THEN 7
+        WHEN '2do Secundaria' THEN 8
+        WHEN '3ro Secundaria' THEN 9
+        WHEN '4to Secundaria' THEN 10
+        WHEN '5to Secundaria' THEN 11
+        WHEN '6to Secundaria' THEN 12
+        ELSE 99  -- Opcional: para grados no listados
+    END,
+            g.date_recorded DESC
         ''').fetchall()
 
     conn.close()
