@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Horario{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Editar Horario</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('list_schedules') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="subject_id" class="form-label">Materia *</label>
+                                <select class="form-control" id="subject_id" name="subject_id" required>
+                                    <option value="">Seleccionar materia</option>
+                                    {% for subject in subjects %}
+                                    <option value="{{ subject.id }}" {{ 'selected' if subject.id == schedule.subject_id }}>
+                                        {{ subject.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="teacher_id" class="form-label">Profesor *</label>
+                                <select class="form-control" id="teacher_id" name="teacher_id" required>
+                                    <option value="">Seleccionar profesor</option>
+                                    {% for teacher in teachers %}
+                                    <option value="{{ teacher.id }}" {{ 'selected' if teacher.id == schedule.teacher_id }}>
+                                        {{ teacher.first_name }} {{ teacher.last_name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="room_id" class="form-label">Aula</label>
+                                <select class="form-control" id="room_id" name="room_id">
+                                    <option value="">Sin asignar</option>
+                                    {% for room in rooms %}
+                                    <option value="{{ room.id }}" {{ 'selected' if room.id == schedule.room_id }}>
+                                        {{ room.name }} (Cap: {{ room.capacity }})
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="grade" class="form-label">Grado *</label>
+                                <select class="form-control" id="grade" name="grade" required>
+                                    <option value="">Seleccionar grado</option>
+                                    <option value="1ro Primaria" {{ 'selected' if schedule.grade == '1ro Primaria' }}>1ro Primaria</option>
+                                    <option value="2do Primaria" {{ 'selected' if schedule.grade == '2do Primaria' }}>2do Primaria</option>
+                                    <option value="3ro Primaria" {{ 'selected' if schedule.grade == '3ro Primaria' }}>3ro Primaria</option>
+                                    <option value="4to Primaria" {{ 'selected' if schedule.grade == '4to Primaria' }}>4to Primaria</option>
+                                    <option value="5to Primaria" {{ 'selected' if schedule.grade == '5to Primaria' }}>5to Primaria</option>
+                                    <option value="6to Primaria" {{ 'selected' if schedule.grade == '6to Primaria' }}>6to Primaria</option>
+                                    <option value="1ro Secundaria" {{ 'selected' if schedule.grade == '1ro Secundaria' }}>1ro Secundaria</option>
+                                    <option value="2do Secundaria" {{ 'selected' if schedule.grade == '2do Secundaria' }}>2do Secundaria</option>
+                                    <option value="3ro Secundaria" {{ 'selected' if schedule.grade == '3ro Secundaria' }}>3ro Secundaria</option>
+                                    <option value="4to Secundaria" {{ 'selected' if schedule.grade == '4to Secundaria' }}>4to Secundaria</option>
+                                    <option value="5to Secundaria" {{ 'selected' if schedule.grade == '5to Secundaria' }}>5to Secundaria</option>
+                                    <option value="6to Secundaria" {{ 'selected' if schedule.grade == '6to Secundaria' }}>6to Secundaria</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Fecha *</label>
+                                <input type="date" class="form-control" id="date" name="date" value="{{ schedule.date }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="start_time" class="form-label">Hora de Inicio *</label>
+                                <input type="time" class="form-control" id="start_time" name="start_time" value="{{ schedule.start_time }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="end_time" class="form-label">Hora de Fin *</label>
+                                <input type="time" class="form-control" id="end_time" name="end_time" value="{{ schedule.end_time }}" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notas Adicionales</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3">{{ schedule.notes or '' }}</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Actualizar Horario
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

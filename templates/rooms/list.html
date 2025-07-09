@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Aulas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Aulas</h1>
+    {% if session.user_role == 'director' %}
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('add_room') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Agregar Aula
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for room in rooms %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">{{ room.name }}</h6>
+                <span class="badge bg-info">{{ room.room_type or 'Aula' }}</span>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>Capacidad:</strong> {{ room.capacity or 'No especificada' }} estudiantes<br>
+                    <strong>Ubicación:</strong> {{ room.location or 'No especificada' }}<br>
+                    {% if room.equipment %}
+                    <strong>Equipamiento:</strong> {{ room.equipment }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">
+                    <i class="fas fa-calendar-plus"></i> Creada: {{ room.created_at.split(' ')[0] if room.created_at else 'N/A' }}
+                </small>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> No hay aulas registradas
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

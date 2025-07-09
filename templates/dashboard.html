@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Sistema de Gestión{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">
+                <i class="fas fa-user-graduate"></i> Estudiantes
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ stats.students }}</h4>
+                <p class="card-text">Total de estudiantes registrados</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">
+                <i class="fas fa-chalkboard-teacher"></i> Profesores
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ stats.teachers }}</h4>
+                <p class="card-text">Total de profesores registrados</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-header">
+                <i class="fas fa-book"></i> Materias
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ stats.subjects }}</h4>
+                <p class="card-text">Total de materias disponibles</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">
+                <i class="fas fa-calendar-alt"></i> Horarios
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ stats.schedules }}</h4>
+                <p class="card-text">Clases programadas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-secondary mb-3">
+            <div class="card-header">
+                <i class="fas fa-bullhorn"></i> Anuncios
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ stats.announcements }}</h4>
+                <p class="card-text">Anuncios activos</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-dark mb-3">
+            <div class="card-header">
+                <i class="fas fa-door-open"></i> Aulas
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ stats.rooms }}</h4>
+                <p class="card-text">Aulas disponibles</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6><i class="fas fa-clock"></i> Accesos Rápidos</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('schedule_calendar') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-calendar"></i> Ver Calendario
+                    </a>
+                    <a href="{{ url_for('list_announcements') }}" class="btn btn-outline-info btn-sm">
+                        <i class="fas fa-bullhorn"></i> Ver Anuncios
+                    </a>
+                    {% if session.user_role in ['director', 'profesor'] %}
+                    <a href="{{ url_for('add_schedule') }}" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-plus"></i> Nuevo Horario
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recent_announcements %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bullhorn"></i> Anuncios Recientes</h5>
+            </div>
+            <div class="card-body">
+                {% for announcement in recent_announcements %}
+                <div class="alert alert-{{ 'danger' if announcement.priority == 'alta' else 'warning' if announcement.priority == 'media' else 'info' }} alert-dismissible">
+                    <h6 class="alert-heading">
+                        {{ announcement.title }}
+                        <small class="text-muted">({{ announcement.category or 'General' }})</small>
+                    </h6>
+                    <p class="mb-1">{{ announcement.content[:150] }}{% if announcement.content|length > 150 %}...{% endif %}</p>
+                    <small class="text-muted">
+                        Por {{ announcement.author_name }} - {{ announcement.created_at.split(' ')[0] }}
+                    </small>
+                    <a href="{{ url_for('view_announcement', id=announcement.id) }}" class="btn btn-sm btn-outline-primary ms-2">
+                        Leer más
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Bienvenido al Sistema de Gestión Escolar</h5>
+            </div>
+            <div class="card-body">
+                <p>Este sistema permite la gestión integral de la Unidad Educativa "Rafael Mendoza Castellón".</p>
+                <p><strong>Funcionalidades disponibles:</strong></p>
+                <ul>
+                    <li>Gestión de estudiantes (registro, edición, eliminación)</li>
+                    <li>Gestión de profesores</li>
+                    <li>Gestión de materias</li>
+                    <li>Registro y consulta de notas</li>
+                    <li>Control de acceso por roles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

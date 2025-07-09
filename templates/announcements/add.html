@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Anuncio{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Nuevo Anuncio</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('list_announcements') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Título *</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Contenido *</label>
+                        <textarea class="form-control" id="content" name="content" rows="6" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Categoría</label>
+                                <select class="form-control" id="category" name="category">
+                                    <option value="">Seleccionar categoría</option>
+                                    <option value="academico">Académico</option>
+                                    <option value="administrativo">Administrativo</option>
+                                    <option value="evento">Evento</option>
+                                    <option value="emergencia">Emergencia</option>
+                                    <option value="general">General</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">Prioridad *</label>
+                                <select class="form-control" id="priority" name="priority" required>
+                                    <option value="baja">Baja</option>
+                                    <option value="media" selected>Media</option>
+                                    <option value="alta">Alta</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="target_audience" class="form-label">Dirigido a *</label>
+                                <select class="form-control" id="target_audience" name="target_audience" required>
+                                    <option value="todos" selected>Todos</option>
+                                    <option value="estudiantes">Estudiantes</option>
+                                    <option value="profesores">Profesores</option>
+                                    <option value="padres">Padres</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="expires_at" class="form-label">Fecha de Expiración</label>
+                                <input type="date" class="form-control" id="expires_at" name="expires_at">
+                                <small class="form-text text-muted">Opcional. Deje vacío si no expira.</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-bullhorn"></i> Publicar Anuncio
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6><i class="fas fa-info-circle"></i> Guía de Anuncios</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Prioridades:</strong></p>
+                <ul class="small">
+                    <li><span class="badge bg-danger">Alta</span> - Emergencias, información crítica</li>
+                    <li><span class="badge bg-warning">Media</span> - Eventos importantes, fechas límite</li>
+                    <li><span class="badge bg-info">Baja</span> - Información general</li>
+                </ul>
+                
+                <p><strong>Categorías:</strong></p>
+                <ul class="small">
+                    <li><strong>Académico:</strong> Exámenes, tareas, calificaciones</li>
+                    <li><strong>Administrativo:</strong> Procedimientos, documentos</li>
+                    <li><strong>Evento:</strong> Actividades, celebraciones</li>
+                    <li><strong>Emergencia:</strong> Situaciones urgentes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

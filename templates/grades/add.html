@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Nota{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Registrar Nota</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('list_grades') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="student_id" class="form-label">Estudiante *</label>
+                        <select class="form-control" id="student_id" name="student_id" required>
+                            <option value="">Seleccionar estudiante</option>
+                            {% for student in students %}
+                            <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }} - {{ student.grade }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="subject_id" class="form-label">Materia *</label>
+                        <select class="form-control" id="subject_id" name="subject_id" required>
+                            <option value="">Seleccionar materia</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="grade_value" class="form-label">Nota *</label>
+                                <input type="number" class="form-control" id="grade_value" name="grade_value" 
+                                       min="0" max="10" step="0.1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="grade_type" class="form-label">Tipo de Nota *</label>
+                                <select class="form-control" id="grade_type" name="grade_type" required>
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="parcial">Parcial</option>
+                                    <option value="final">Final</option>
+                                    <option value="tarea">Tarea</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="teacher_id" class="form-label">Profesor *</label>
+                        <select class="form-control" id="teacher_id" name="teacher_id" required>
+                            <option value="">Seleccionar profesor</option>
+                            {% for teacher in teachers %}
+                            <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Registrar Nota
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

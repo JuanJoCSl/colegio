@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}Agregar Usuario{% endblock %} {%
+block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Agregar Usuario</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('list_users') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Nombre de Usuario*</label>
+                                <input type="text" class="form-control" id="username" name="username" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label" >Contraseña*</label>
+                                <input type="password" class="form-control" id="password" name="password" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="full_name" class="form-label">Nombre Completo*</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" required />
+                    </div>
+
+                    <div class="row">
+                        <label for="role" class="form-label">Rol*</label>
+                        <select class="form-control" id="role" name="role" required>
+                            <option value="">Seleccionar Rol</option>
+                            <option value="director">Director</option>
+                            <option value="profesor">Profesor</option>
+                            <option value="padre">Padre</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" />
+                    </div>
+                    <br /><br />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>Guardar Usuario
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

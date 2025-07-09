@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Calendario de Clases{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Calendario de Clases</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('list_schedules') }}" class="btn btn-outline-primary">
+                <i class="fas fa-list"></i> Vista Lista
+            </a>
+        </div>
+        {% if session.user_role in ['director', 'profesor'] %}
+        <a href="{{ url_for('add_schedule') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Agregar Horario
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: {{ events|safe }},
+        eventClick: function(info) {
+            alert('Clase: ' + info.event.title + '\n' + info.event.extendedProps.description);
+        },
+        height: 'auto',
+        eventColor: '#007bff',
+        eventTextColor: '#ffffff'
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}

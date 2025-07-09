@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Anuncios{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Anuncios</h1>
+    {% if session.user_role in ['director', 'profesor'] %}
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('add_announcement') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nuevo Anuncio
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Filters -->
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Categoría</label>
+                        <select class="form-control" id="category" name="category">
+                            <option value="">Todas las categorías</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.category }}" {{ 'selected' if current_category == cat.category }}>
+                                {{ cat.category.title() }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="priority" class="form-label">Prioridad</label>
+                        <select class="form-control" id="priority" name="priority">
+                            <option value="">Todas las prioridades</option>
+                            <option value="alta" {{ 'selected' if current_priority == 'alta' }}>Alta</option>
+                            <option value="media" {{ 'selected' if current_priority == 'media' }}>Media</option>
+                            <option value="baja" {{ 'selected' if current_priority == 'baja' }}>Baja</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fas fa-filter"></i> Filtrar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Announcements -->
+<div class="row">
+    {% for announcement in announcements %}
+    <div class="col-md-6 mb-3">
+        <div class="card h-100 border-{{ 'danger' if announcement.priority == 'alta' else 'warning' if announcement.priority == 'media' else 'info' }}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">
+                    {{ announcement.title }}
+                    <span class="badge bg-{{ 'danger' if announcement.priority == 'alta' else 'warning' if announcement.priority == 'media' else 'info' }}">
+                        {{ announcement.priority.title() }}
+                    </span>
+                </h6>
+                <small class="text-muted">{{ announcement.category or 'General' }}</small>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ announcement.content[:200] }}{% if announcement.content|length > 200 %}...{% endif %}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        Por {{ announcement.author_name }}<br>
+                        {{ announcement.created_at.split(' ')[0] }}
+                    </small>
+                    <div class="btn-group">
+                        <a href="{{ url_for('view_announcement', id=announcement.id) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                        {% if session.user_role in ['director', 'profesor'] %}
+                        <a href="{{ url_for('edit_announcement', id=announcement.id) }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        {% if session.user_role == 'director' %}
+                        <a href="{{ url_for('delete_announcement', id=announcement.id) }}" 
+                           class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('¿Está seguro de eliminar este anuncio?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if announcement.expires_at %}
+            <div class="card-footer">
+                <small class="text-muted">
+                    <i class="fas fa-clock"></i> Expira: {{ announcement.expires_at }}
+                </small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> No hay anuncios disponibles
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

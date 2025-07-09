@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Anuncio{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Editar Anuncio</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('list_announcements') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Título *</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ announcement.title }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Contenido *</label>
+                        <textarea class="form-control" id="content" name="content" rows="6" required>{{ announcement.content }}</textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Categoría</label>
+                                <select class="form-control" id="category" name="category">
+                                    <option value="">Seleccionar categoría</option>
+                                    <option value="academico" {{ 'selected' if announcement.category == 'academico' }}>Académico</option>
+                                    <option value="administrativo" {{ 'selected' if announcement.category == 'administrativo' }}>Administrativo</option>
+                                    <option value="evento" {{ 'selected' if announcement.category == 'evento' }}>Evento</option>
+                                    <option value="emergencia" {{ 'selected' if announcement.category == 'emergencia' }}>Emergencia</option>
+                                    <option value="general" {{ 'selected' if announcement.category == 'general' }}>General</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">Prioridad *</label>
+                                <select class="form-control" id="priority" name="priority" required>
+                                    <option value="baja" {{ 'selected' if announcement.priority == 'baja' }}>Baja</option>
+                                    <option value="media" {{ 'selected' if announcement.priority == 'media' }}>Media</option>
+                                    <option value="alta" {{ 'selected' if announcement.priority == 'alta' }}>Alta</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="target_audience" class="form-label">Dirigido a *</label>
+                                <select class="form-control" id="target_audience" name="target_audience" required>
+                                    <option value="todos" {{ 'selected' if announcement.target_audience == 'todos' }}>Todos</option>
+                                    <option value="estudiantes" {{ 'selected' if announcement.target_audience == 'estudiantes' }}>Estudiantes</option>
+                                    <option value="profesores" {{ 'selected' if announcement.target_audience == 'profesores' }}>Profesores</option>
+                                    <option value="padres" {{ 'selected' if announcement.target_audience == 'padres' }}>Padres</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="expires_at" class="form-label">Fecha de Expiración</label>
+                                <input type="date" class="form-control" id="expires_at" name="expires_at" value="{{ announcement.expires_at or '' }}">
+                                <small class="form-text text-muted">Opcional. Deje vacío si no expira.</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Actualizar Anuncio
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

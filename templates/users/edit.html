@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Editar Usuario</h2>
+<form method="POST">
+    <div class="form-group">
+        <label for="username">Nombre de Usuario*</label>
+        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="new_password">Nueva Contraseña (dejar en blanco para mantener actual)</label>
+        <input type="password" class="form-control" id="new_password" name="new_password">
+    </div>
+    
+    <div class="form-group">
+        <label for="full_name">Nombre Completo*</label>
+        <input type="text" class="form-control" id="full_name" name="full_name" value="{{ user.full_name }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="role">Rol*</label>
+        <select class="form-control" id="role" name="role" required>
+            <option value="director" {% if user.role == 'director' %}selected{% endif %}>Director</option>
+            <option value="profesor" {% if user.role == 'profesor' %}selected{% endif %}>Profesor</option>
+            <option value="padre" {% if user.role == 'padre' %}selected{% endif %}>Padre</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+    <a href="{{ url_for('list_users') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

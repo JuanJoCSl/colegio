@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Aula{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Agregar Aula</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('list_rooms') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nombre del Aula *</label>
+                                <input type="text" class="form-control" id="name" name="name" required placeholder="Ej: Aula 101">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="capacity" class="form-label">Capacidad</label>
+                                <input type="number" class="form-control" id="capacity" name="capacity" min="1" placeholder="Número de estudiantes">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="room_type" class="form-label">Tipo de Aula</label>
+                                <select class="form-control" id="room_type" name="room_type">
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="aula">Aula Regular</option>
+                                    <option value="laboratorio">Laboratorio</option>
+                                    <option value="biblioteca">Biblioteca</option>
+                                    <option value="auditorio">Auditorio</option>
+                                    <option value="gimnasio">Gimnasio</option>
+                                    <option value="sala_computo">Sala de Cómputo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Ubicación</label>
+                                <input type="text" class="form-control" id="location" name="location" placeholder="Ej: Primer piso, ala norte">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="equipment" class="form-label">Equipamiento</label>
+                        <textarea class="form-control" id="equipment" name="equipment" rows="3" placeholder="Describe el equipamiento disponible en el aula..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Aula
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6><i class="fas fa-info-circle"></i> Información</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Tipos de aula:</strong></p>
+                <ul class="small">
+                    <li><strong>Aula Regular:</strong> Clases tradicionales</li>
+                    <li><strong>Laboratorio:</strong> Ciencias, experimentos</li>
+                    <li><strong>Biblioteca:</strong> Lectura, investigación</li>
+                    <li><strong>Auditorio:</strong> Eventos, presentaciones</li>
+                    <li><strong>Gimnasio:</strong> Educación física</li>
+                    <li><strong>Sala de Cómputo:</strong> Informática</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
